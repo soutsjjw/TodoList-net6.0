@@ -7,7 +7,7 @@ namespace TodoList.Infrasturcture;
 
 public static class ApplicationStartupExtensions
 {
-    public static void MigrateDatabase(this WebApplication app)
+    public static async void MigrateDatabase(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
@@ -16,6 +16,12 @@ public static class ApplicationStartupExtensions
         {
             var context = services.GetRequiredService<TodoListDbContext>();
             context.Database.Migrate();
+
+            // 生成種子數據
+            TodoListDbContextSeed.SeedSampleDataAsync(context).Wait();
+
+            // 更新部分種子數據以便查看審計字段
+            TodoListDbContextSeed.UpdateSampleDataAsync(context).Wait();
         }
         catch (System.Exception ex)
         {
