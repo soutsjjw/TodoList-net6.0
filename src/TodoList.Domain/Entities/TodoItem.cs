@@ -23,6 +23,7 @@ public class TodoItem : AuditableEntity, IEntity<Guid>, IHasDomainEvent
             _done = value;
         }
     }
+    public Guid ListId { get; set; }
     public TodoList List { get; set; } = null!;
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
