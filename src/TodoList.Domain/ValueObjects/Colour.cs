@@ -11,6 +11,7 @@ public class Colour : ValueObject
 
     public static Colour From(string code)
     {
+        code = string.IsNullOrWhiteSpace(code) ? "#FFFFFF" : code;
         var colour = new Colour { Code = code };
 
         if (!SupportedColours.Contains(colour))

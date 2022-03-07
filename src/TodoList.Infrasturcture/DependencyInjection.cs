@@ -1,6 +1,8 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using TodoList.Application.Common.Interfaces;
 using TodoList.Infrasturcture.Persistence;
 using TodoList.Infrasturcture.Persistence.Repositories;
@@ -25,6 +27,10 @@ public static class DependencyInjection
         services.AddScoped<IDomainEventService, DomainEventService>();
 
         services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
+
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddMediatR(Assembly.GetExecutingAssembly());
         
         return services;
     }

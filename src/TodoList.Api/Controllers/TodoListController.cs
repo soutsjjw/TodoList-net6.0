@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TodoList.Application.TodoLists.Commands.CreateTodoList;
+using TodoList.Application.TodoLists.Queries.GetSingleTodo;
+using TodoList.Application.TodoLists.Queries.GetTodos;
 
 namespace TodoList.Api.Controllers;
 
@@ -14,13 +16,26 @@ public class TodoListController : ControllerBase
     public TodoListController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
-    public async Task<Guid> Create([FromBody] CreateTodoListCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateTodoListCommand command)
     {
-        var createdTodoListId = await _mediator.Send(command);
+        var createdTodoList = await _mediator.Send(command);
 
-        // 出於演示的目的，這裡只返回創建出來的TodoList的Id，
-        // 實際使用中可能會選擇IActionResult作為返回的類型並返回CreatedAtRoute對象，
-        // 因為我們還沒有去寫GET方法，返回CreatedAtRoute會報錯（找不到對應的Route），等講完GET後會在那裡更新
-        return createdTodoListId;
+        // 創建成功回傳201
+        return CreatedAtRoute("TodoListById", new { id = createdTodoList.Id }, createdTodoList);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<TodoListBriefDto>>> Get()
+    {
+        return await _mediator.Send(new GetTodosQuery());
+    }
+
+    [HttpGet("{id:Guid}", Name = "TodoListById")]
+    public async Task<ActionResult<TodoListDto>> GetSingleTodoList(Guid id)
+    {
+        return await _mediator.Send(new GetSingleTodoQuery
+        {
+            ListId = id
+        }) ?? throw new InvalidOperationException();
     }
 }
