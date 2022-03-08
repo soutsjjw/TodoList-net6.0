@@ -1,3 +1,4 @@
+using TodoList.Api.Extensions;
 using TodoList.Application;
 using TodoList.Infrasturcture;
 using TodoList.Infrasturcture.Log;
@@ -21,6 +22,9 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+// 全域異常處理
+app.UseGlobalExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

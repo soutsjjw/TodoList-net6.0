@@ -6,16 +6,16 @@
     <UserSecretsId>e6cc5388-2f54-4065-b404-d45cc980e473</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TodoList.Application\TodoList.Application.csproj"/>
-    <ProjectReference Include="..\TodoList.Infrasturcture\TodoList.Infrastructure.csproj"/>
+    <ProjectReference Include="..\TodoList.Application\TodoList.Application.csproj" />
+    <ProjectReference Include="..\TodoList.Infrasturcture\TodoList.Infrastructure.csproj" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties properties_4launchsettings_1json__JsonSchema=""/>
+      <UserProperties properties_4launchsettings_1json__JsonSchema="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
