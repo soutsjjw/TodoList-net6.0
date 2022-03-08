@@ -1,7 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TodoList.Api.Models;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
+using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
+using TodoList.Domain.Entities;
 
 namespace TodoList.Api.Controllers
 {
@@ -21,6 +24,17 @@ namespace TodoList.Api.Controllers
 
             // 處於演示的目的，這裡只返回創建出來的TodoItem的Id，理由同前
             return createdTodoItem;
+        }
+
+        [HttpPut("{id:Guid}")]
+        public async Task<ApiResponse<TodoItem>> Update(Guid id, [FromBody] UpdateTodoItemCommand command)
+        {
+            if (id != command.Id)
+            {
+                return ApiResponse<TodoItem>.Fail("Query id not match with body");
+            }
+
+            return ApiResponse<TodoItem>.Success(await _mediator.Send(command));
         }
     }
 }
