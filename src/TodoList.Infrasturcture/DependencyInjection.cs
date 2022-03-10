@@ -31,7 +31,7 @@ public static class DependencyInjection
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddMediatR(Assembly.GetExecutingAssembly());
-        
+
         return services;
     }
 }
