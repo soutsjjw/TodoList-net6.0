@@ -39,8 +39,14 @@ namespace TodoList.Api.Controllers
             return ApiResponse<TodoItem>.Success(await _mediator.Send(command));
         }
 
+        //[HttpGet]
+        //public async Task<ApiResponse<PaginatedList<TodoItemDto>>> GetTodoItemsWithPagination([FromQuery] GetTodoItemsWithPaginationQuery query)
+        //{
+        //    return ApiResponse<PaginatedList<TodoItemDto>>.Success(await _mediator.Send(query));
+        //}
+
         [HttpGet]
-        public async Task<ApiResponse<PaginatedList<TodoItemDto>>> GetTodoItemsWithPagination([FromQuery] GetTodoItemsWithPaginationQuery query)
+        public async Task<ApiResponse<PaginatedList<TodoItemDto>>> GetTodoItemsWithCondition([FromQuery] GetTodoItemsWithConditionQuery query)
         {
             return ApiResponse<PaginatedList<TodoItemDto>>.Success(await _mediator.Send(query));
         }
