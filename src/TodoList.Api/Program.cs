@@ -1,4 +1,5 @@
 using TodoList.Api.Extensions;
+using TodoList.Api.Filters;
 using TodoList.Application;
 using TodoList.Infrasturcture;
 using TodoList.Infrasturcture.Log;
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<LogFilterAttribute>();
 
 // 添加應用層配置
 builder.Services.AddApplication();
