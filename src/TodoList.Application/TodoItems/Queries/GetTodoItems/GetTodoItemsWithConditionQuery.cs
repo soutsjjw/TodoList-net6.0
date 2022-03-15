@@ -13,6 +13,7 @@ public class GetTodoItemsWithConditionQuery : IRequest<PaginatedList<TodoItemDto
 {
     public Guid ListId { get; set; }
     public bool? Done { get; set; }
+    public string? Title { get; set; }
     public PriorityLevel? PriorityLevel { get; set; }
     public int PageNumber { get; set; } = 1;
     public int PageSize { get; set; } = 10;
@@ -34,7 +35,8 @@ public class GetTodoItemsWithConditionQueryHandler : IRequestHandler<GetTodoItem
         return await _repository
             .GetAsQueryable(x => x.ListId == request.ListId
                             && (!request.Done.HasValue || x.Done == request.Done)
-                            && (!request.PriorityLevel.HasValue || x.Priority == request.PriorityLevel))
+                            && (!request.PriorityLevel.HasValue || x.Priority == request.PriorityLevel)
+                            && (string.IsNullOrEmpty(request.Title) || x.Title!.Trim().ToLower().Contains(request.Title!.ToLower())))
             .OrderBy(x => x.Title)
             .ProjectTo<TodoItemDto>(_mapper.ConfigurationProvider)
             .PaginatedListAsync(request.PageNumber, request.PageSize);
