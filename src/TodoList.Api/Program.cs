@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpLogging;
 using TodoList.Api.Extensions;
 using TodoList.Api.Filters;
 using TodoList.Application;
@@ -12,6 +13,31 @@ var builder = WebApplication.CreateBuilder(args);
 builder.ConfigureLog();
 
 builder.Services.AddControllers();
+
+builder.Services.AddHttpLogging(options =>
+{
+    // 日誌紀錄的字段配置，可以以 | 連接
+    options.LoggingFields = HttpLoggingFields.All;
+
+    // 增加請求header紀錄
+    options.RequestHeaders.Add("Sec-Fetch-Site");
+    options.RequestHeaders.Add("Sec-Fetch-Mode");
+    options.RequestHeaders.Add("Sec-Fetch-Dest");
+
+    // 增加回應header紀錄
+    options.ResponseHeaders.Add("Server");
+
+    // 增加回應的媒體類型
+    options.MediaTypeOptions.AddText("application/javascript");
+
+    // 配置請求body日誌最大長度
+    options.RequestBodyLogLimit = 4096;
+
+    // 配置回應body日誌最大長度
+    options.ResponseBodyLogLimit = 4096;
+});
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -39,6 +65,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseHttpLogging();
 
 app.MapControllers();
 
