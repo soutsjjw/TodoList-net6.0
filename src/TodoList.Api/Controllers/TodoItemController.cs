@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TodoList.Api.Models;
+using TodoList.Application.Common.Models;
 using TodoList.Application.TodoItems.Commands.CreateTodoItem;
 using TodoList.Application.TodoItems.Commands.UpdateTodoItem;
+using TodoList.Application.TodoItems.Queries.GetTodoItems;
 using TodoList.Domain.Entities;
 
 namespace TodoList.Api.Controllers
@@ -35,6 +37,12 @@ namespace TodoList.Api.Controllers
             }
 
             return ApiResponse<TodoItem>.Success(await _mediator.Send(command));
+        }
+
+        [HttpGet]
+        public async Task<ApiResponse<PaginatedList<TodoItemDto>>> GetTodoItemsWithPagination([FromQuery] GetTodoItemsWithPaginationQuery query)
+        {
+            return ApiResponse<PaginatedList<TodoItemDto>>.Success(await _mediator.Send(query));
         }
     }
 }

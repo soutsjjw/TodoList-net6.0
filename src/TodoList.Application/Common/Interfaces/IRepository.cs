@@ -20,6 +20,7 @@ public interface IRepository<T> where T : class
 
     IQueryable<T> GetAsQueryable();
     IQueryable<T> GetAsQueryable(ISpecification<T> spec);
+    IQueryable<T> GetAsQueryable(Expression<Func<T, bool>> condition);
 
     #endregion
 

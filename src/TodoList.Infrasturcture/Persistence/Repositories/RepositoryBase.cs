@@ -51,9 +51,13 @@ public class RepositoryBase<T> : IRepository<T> where T : class
 
     #region 1. 查詢基礎操作接口實現
 
-    public IQueryable<T> GetAsQueryable() => _dbContext.Set<T>();
+    public IQueryable<T> GetAsQueryable()
+        => _dbContext.Set<T>();
 
-    public IQueryable<T> GetAsQueryable(ISpecification<T> spec) => ApplySpecification(spec);
+    public IQueryable<T> GetAsQueryable(ISpecification<T> spec)
+        => ApplySpecification(spec);
+    public IQueryable<T> GetAsQueryable(Expression<Func<T, bool>> condition)
+        => _dbContext.Set<T>().Where(condition);
 
     #endregion
 
