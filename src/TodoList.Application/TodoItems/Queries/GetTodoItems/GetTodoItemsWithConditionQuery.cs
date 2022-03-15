@@ -4,6 +4,7 @@ using MediatR;
 using TodoList.Application.Common.Interfaces;
 using TodoList.Application.Common.Mappings;
 using TodoList.Application.Common.Models;
+using TodoList.Application.TodoItems.Specs;
 using TodoList.Domain.Entities;
 using TodoList.Domain.Enums;
 
@@ -15,6 +16,7 @@ public class GetTodoItemsWithConditionQuery : IRequest<PaginatedList<TodoItemDto
     public bool? Done { get; set; }
     public string? Title { get; set; }
     public PriorityLevel? PriorityLevel { get; set; }
+    public string? SortOrder { get; set; } = "title_asc";
     public int PageNumber { get; set; } = 1;
     public int PageSize { get; set; } = 10;
 }
@@ -32,12 +34,9 @@ public class GetTodoItemsWithConditionQueryHandler : IRequestHandler<GetTodoItem
 
     public async Task<PaginatedList<TodoItemDto>> Handle(GetTodoItemsWithConditionQuery request, CancellationToken cancellationToken)
     {
+        var spec = new TodoItemSpec(request);
         return await _repository
-            .GetAsQueryable(x => x.ListId == request.ListId
-                            && (!request.Done.HasValue || x.Done == request.Done)
-                            && (!request.PriorityLevel.HasValue || x.Priority == request.PriorityLevel)
-                            && (string.IsNullOrEmpty(request.Title) || x.Title!.Trim().ToLower().Contains(request.Title!.ToLower())))
-            .OrderBy(x => x.Title)
+            .GetAsQueryable(spec)
             .ProjectTo<TodoItemDto>(_mapper.ConfigurationProvider)
             .PaginatedListAsync(request.PageNumber, request.PageSize);
     }
